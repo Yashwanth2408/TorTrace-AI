@@ -1,338 +1,367 @@
-# TorTrace-AI
+# 🕵️‍♂️ TorTrace-AI
 
 **Multi-Layer Tor Network Attribution System**
+*Advanced AI-powered network forensics for identifying probable Tor entry (guard) nodes using statistical correlation, deep learning, and graph neural networks.*
 
-Advanced network forensics tool for identifying probable entry points into the Tor network through statistical correlation, deep learning, and graph neural networks.
+> Developed for **TN Police Hackathon 2025** — Problem Statement: *Tor Network User Tracing*
 
-> Developed for TN Police Hackathon 2025 - Problem Statement: Tor Network User Tracing
+---
+
+## Table of Contents
+
+* [Project Summary](#project-summary)
+* [Problem Statement](#problem-statement)
+* [Solution Overview](#solution-overview)
+* [Key Features](#key-features)
+* [Architecture & Workflow](#architecture--workflow)
+* [Technical Approach](#technical-approach)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+* [Quick Start](#quick-start)
+* [Usage Examples](#usage-examples)
+* [Project Structure](#project-structure)
+* [Results](#results)
+* [Validation & Testing](#validation--testing)
+* [Roadmap](#roadmap)
+* [Legal & Ethical Notice](#legal--ethical-notice)
+* [Contributing](#contributing)
+* [License](#license)
+* [Contact](#contact)
+* [Acknowledgments](#acknowledgments)
+* [References](#references)
+
+---
+
+## Project Summary
+
+TorTrace-AI is a modular, production-minded toolset that combines **statistical timing correlation**, **deep-learning website fingerprinting (CNN-LSTM)**, and **graph neural networks (GNNs)** to produce ranked candidate guard nodes for Tor circuits. It includes PCAP analysis, automated Tor relay collection, an API for programmatic interaction, and a Flask dashboard for visualization and reporting.
 
 ---
 
 ## Problem Statement
 
-The Tor network provides anonymity to its users by routing traffic through multiple relays, making it extremely difficult for law enforcement to identify the origin of criminal activities. This project addresses the challenge of **correlating Tor network activity patterns to identify probable origin IPs** for investigative purposes.
+The Tor network offers anonymity by forwarding traffic through multiple relays. This makes attribution of malicious activity and identification of origin IPs difficult for lawful investigations. TorTrace-AI provides a multi-method approach to increase confidence in guard node attribution while producing forensically useful artifacts.
 
 ---
 
 ## Solution Overview
 
-TorTrace-AI implements a novel multi-layer attribution approach that combines:
+TorTrace-AI performs three independent analyses on observed traffic and network state and combines results via an ensemble confidence scoring mechanism:
 
-1. **Statistical Timing Correlation** - Analyzes inter-packet timing patterns between entry and exit nodes.
-2. **Deep Learning Website Fingerprinting** - CNN-LSTM model for identifying visited websites through encrypted traffic.
-3. **Graph Neural Networks** - Models entire Tor network topology to predict probable guard nodes.
-4. **Real-time Visualization** - Web dashboard for forensic analysis and reporting.
+1. **Statistical Timing Correlation** — correlates inter-packet timing between entry and exit sides.
+2. **Website Fingerprinting (CNN-LSTM)** — classifies websites from encrypted packet timing/size sequences.
+3. **Graph Neural Network (GNN)** — predicts probable guard nodes from the Tor topology and centrality features.
 
-### Key Features
-
-- Automated collection of 9,000+ live Tor relay information.
-- PCAP traffic analysis with Tor relay identification.
-- Multi-method guard node attribution with confidence scoring.
-- Court-ready forensic reports in JSON format.
-- Modern web dashboard for real-time monitoring.
-- Production-ready architecture with comprehensive logging.
+Outputs are aggregated, assigned confidence scores, and presented in JSON reports and a web dashboard.
 
 ---
 
-## Real Tor Traffic Validation
+## Key Features
 
-## Real Tor Traffic Validation
-
-Our system was tested end-to-end on live Tor traffic captured from a running Tor client. Below are proof-of-analysis screenshots from each pipeline step:
-
-### 1. PCAP Traffic Analyzer Output  
-![PCAP Traffic Analyzer Output](data/output_screenshots/PCAP Traffic Analyzer Output.png)
-
-### 2. Timing Correlation Output  
-![Timing Correlation Output](data/output_screenshots/Timing Correlation Output.png)
-
-### 3. Website Fingerprinting Output  
-![Website Fingerprinting Output](data/output_screenshots/Website Fingerprinting Output.png)
-
-### 4. Graph Neural Network (GNN) Predictor Output  
-![Graph Neural Network (GNN) Predictor Output](data/output_screenshots/Graph Neural Network (GNN) Predictor Output.png)
-
-### 5. Dashboard Visualization  
-![Dashboard Screenshot](data/output_screenshots/Dashboard.png)
-
-**What this proves:**  
-- System successfully processed real Tor traffic, detected active relays, and performed full attribution.
-- Multi-method pipeline works end-to-end, not just on simulation or sample data.
-- Outputs are visible in both logs and the interactive dashboard for investigators.
+* Automated collection and storage of **9,000+ Tor relay** records.
+* PCAP ingestion and Tor flow extraction.
+* Multi-method guard node ranking with confidence scoring.
+* Court-ready JSON forensic reports and logs.
+* Real-time Flask dashboard for analysis and export.
+* Modular codebase suitable for research, validation, and extension.
 
 ---
 
-## Architecture
+## Architecture & Workflow
 
-TorTrace-AI/
-├── data_collection/ # Tor network consensus collector
-├── traffic_analysis/ # PCAP analyzer & pattern extractor
-├── correlation/ # Statistical timing correlation
-├── ml_models/ # Deep learning & GNN models
-├── visualization/ # Web dashboard (Flask)
-└── data/ # Database & analysis results
+```
+Tor Network (Consensus) → data_collection/tor_collector.py → SQLite (tor_relays.db)
+Network Traffic (PCAP)  → traffic_analysis/pcap_analyzer.py → timing/size feature sequences
+Features → correlation/timing_correlator.py  → timing candidates
+         → ml_models/website_fingerprinter.py → fingerprint candidates
+         → ml_models/gnn_guard_predictor.py → GNN candidates
+Ensemble → aggregator → JSON report + dashboard API
+```
 
-### System Workflow
+Screenshots (stored in `data/output_screenshots/`):
 
-Tor Network → Data Collector → SQLite Database (9,196 relays)
-↓
-Network Traffic → PCAP Analyzer → Timing Patterns
-↓
-Patterns → [Timing Correlation + Website Fingerprinting + GNN] → Attribution
-↓
-Results → Dashboard API → Web Interface + JSON Reports
+* `PCAP Traffic Analyzer Output.png`
+* `Timing Correlation Output.png`
+* `Website Fingerprinting Output.png`
+* `Graph Neural Network (GNN) Predictor Output.png`
+* `Dashboard.png`
 
 ---
 
 ## Technical Approach
 
-### Novel Approaches
+### Multi-Method Consensus Attribution
 
-1. **Multi-Method Consensus Attribution**
-   - Combines three independent analysis methods
-   - Cross-validates results for higher confidence
-   - Reduces false positives through ensemble approach
+* Independent methods reduce single-point false positives.
+* Ensemble scoring reconciles timing, fingerprint, and graph confidences.
 
-2. **Graph Neural Network Analysis**
-   - Models Tor network as directed graph
-   - PageRank, betweenness, and degree centrality
-   - Identifies important nodes for investigation
+### Graph Neural Network
 
-3. **CNN-LSTM Website Fingerprinting**
-   - Features from timing and size sequences
-   - Identifies websites despite Tor encryption
+* Tor represented as a directed graph.
+* Node features: PageRank, betweenness, degree centrality, relay flags.
+* Supervised GNN predicts guard-node probability.
 
-### Technologies Used
+### CNN-LSTM Fingerprinting
 
-- **Backend**: Python 3.10, Flask, SQLite
-- **Network**: Scapy, Stem (Tor controller)
-- **Machine Learning**: PyTorch, NetworkX
-- **Data Science**: NumPy, SciPy, pandas
-- **Visualization**: HTML5, CSS3, JavaScript
+* Inputs: packet inter-arrival times and packet sizes (sequence).
+* CNN extracts local temporal patterns; LSTM models sequence dependencies.
+* Outputs site classification probabilities.
+
+### Statistical Timing Correlation
+
+* Uses cross-correlation of packet timing sequences across observed flows.
+* Produces candidate guard sets with correlation scores and p-values.
+
+---
+
+## Prerequisites
+
+* Ubuntu 20.04+ (or similar Linux)
+* Python 3.10+
+* Tor (installed and running)
+* `tcpdump`/`tshark` (for packet capture) — root privileges may be required
+* Recommended: GPU for DL model training/inference (optional)
 
 ---
 
 ## Installation
 
-### Prerequisites
-
-- Ubuntu 20.04+ or similar Linux distribution
-- Python 3.10+
-- Tor service installed and running
-- Root access for packet capture (optional)
-
-### Setup
-
-1. Clone repository
-
+```bash
+# Clone repo
 git clone https://github.com/Yashwanth2408/TorTrace-AI.git
-cd TorTrace-AI...
+cd TorTrace-AI
 
-2. Create virtual environment
-
+# Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-3. Install dependencies
-
+# Install dependencies
 pip install -r requirements.txt
 
-4. Configure Tor control port (`/etc/tor/torrc`)
+# Configure Tor control port (edit /etc/tor/torrc if needed)
+# e.g., add:
+# ControlPort 9051
+# HashedControlPassword <your-hashed-password>
 
-Restart Tor:
+# Restart Tor
 sudo systemctl restart tor
 
-5. Run tests
-
+# Run unit/integration tests
 python test_system.py
+```
 
 ---
 
 ## Quick Start
 
-### 1. Collect Tor Network Data
+1. **Collect Tor relay data**
 
+```bash
 python data_collection/tor_collector.py
+```
 
-### 2. Generate Traffic (or analyze real PCAP)
+2. **Capture or provide PCAP**
 
-cd traffic_analysis
-python generate_sample_traffic.py
+```bash
+# Live capture (example; requires root)
+sudo tcpdump -i any -w data/pcap_files/sample.pcap 'port 9001 or port 9030'
 
-or 
+# Or use existing PCAP
+mv /path/to/capture.pcap data/pcap_files/sample.pcap
+```
 
-For real capture
-sudo tcpdump -i any -w data/pcap_files/sample.pcap 'port 9001'
-python pcap_analyzer.py
+3. **Analyze PCAP**
 
-### 3. Attribution Analysis
+```bash
+python traffic_analysis/pcap_analyzer.py --pcap data/pcap_files/sample.pcap --out data/pcap_files/analysis_results.json
+```
 
-cd ../correlation
-python timing_correlator.py
-cd ../ml_models
-python website_fingerprinter.py
-python gnn_guard_predictor.py
+4. **Run analysis modules**
 
-### 4. Launch Dashboard
+```bash
+# Timing correlator
+python correlation/timing_correlator.py --input data/pcap_files/analysis_results.json --output data/results/timing_candidates.json
 
-cd ../visualization
+# Website fingerprinting
+python ml_models/website_fingerprinter.py --input data/pcap_files/analysis_results.json --output data/results/fingerprint_candidates.json
+
+# GNN guard predictor
+python ml_models/gnn_guard_predictor.py --db data/tor_relays.db --input data/pcap_files/analysis_results.json --output data/results/gnn_candidates.json
+```
+
+5. **Aggregate & export**
+
+```bash
+python correlation/ensemble_aggregator.py --inputs data/results/*.json --output data/results/attribution_report.json
+```
+
+6. **Launch dashboard**
+
+```bash
+cd visualization
 python dashboard_app.py
+```
 
-Access via: [http://localhost:5000](http://localhost:5000)
+Open: `http://localhost:5000`
 
 ---
 
 ## Usage Examples
 
-### Real Traffic Capture
+### Programmatic: Timing correlator API
 
-Capture Tor traffic
-sudo tcpdump -i any -w capture.pcap 'port 9001 or port 9030'
-
-Move to analysis directory
-mv capture.pcap data/pcap_files/sample.pcap
-
-Analyze
-python traffic_analysis/pcap_analyzer.py
-
-### Programmatic API
-
+```python
 from correlation.timing_correlator import TimingCorrelator
 
-correlator = TimingCorrelator()
-patterns = correlator.load_traffic_patterns('data/pcap_files/analysis_results.json')
-candidates = correlator.find_guard_node_candidates(patterns)
+tc = TimingCorrelator(db_path='data/tor_relays.db')
+patterns = tc.load_traffic_patterns('data/pcap_files/analysis_results.json')
+candidates = tc.find_guard_node_candidates(patterns, top_k=5)
+print(candidates)
+```
 
----
+### Parse ensemble results (JSON)
 
-## Results
+```python
+import json
 
-- **Relay Database**: 9,196 active Tor relays
-- **Analysis Speed**: 330 packets in <1 second
-- **GNN Accuracy**: 100% on observed guard nodes
-- **Dashboard Response**: <100ms API latency
-
----
-
-## Validation & Testing
-
-Run full system test
-python test_system.py
-
-Expected: 7/7 tests passed
-- Tor Network Collection
-- Traffic Generation
-- Traffic Analysis
-- Timing Correlation
-- Website Fingerprinting
-- GNN Prediction
-- Dashboard API
-
+with open('data/results/attribution_report.json') as f:
+    report = json.load(f)
+for item in report['candidates'][:10]:
+    print(item['relay_fingerprint'], item['combined_score'])
+```
 
 ---
 
 ## Project Structure
 
+```
 TorTrace-AI/
-├── data_collection/
-│ └── tor_collector.py # Collects Tor relay data
-├── traffic_analysis/
-│ ├── pcap_analyzer.py # Analyzes PCAP files
-│ └── generate_sample_traffic.py # Creates test data
-├── correlation/
-│ └── timing_correlator.py # Statistical correlation
-├── ml_models/
-│ ├── website_fingerprinter.py # Deep learning model
-│ └── gnn_guard_predictor.py # Graph neural network
-├── visualization/
-│ ├── dashboard_app.py # Flask backend
-│ └── templates/
-│ └── dashboard.html # Web interface
-├── data/
-│ ├── tor_relays.db # SQLite database
-│ └── pcap_files/ # Traffic captures
-├── test_system.py # Integration tests
-└── README.md # This file
+├── data_collection/         # tor_collector.py
+├── traffic_analysis/        # pcap_analyzer.py, generate_sample_traffic.py
+├── correlation/             # timing_correlator.py, ensemble_aggregator.py
+├── ml_models/               # website_fingerprinter.py, gnn_guard_predictor.py
+├── visualization/           # dashboard_app.py, templates/
+├── data/                    # tor_relays.db, pcap_files/, output_screenshots/
+├── tests/                   # unit & integration tests
+├── test_system.py           # integration test runner
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Results (Reported)
+
+> These numbers reflect validation performed during hackathon testing and research runs.
+
+* **Collected Relays:** 9,196 active relays (SQLite snapshot)
+* **Analysis Speed:** Example: 330 packets processed in <1s (hardware dependent)
+* **GNN Accuracy:** Reported 100% on observed guard nodes in controlled validation; **interpret with caution** (dataset bias possible)
+* **Dashboard Latency:** <100 ms API response in tested environment
+
+---
+
+## Validation & Testing
+
+Run the test harness:
+
+```bash
+python test_system.py
+```
+
+Expected tests:
+
+* Tor Network Collection
+* Traffic Generation / Sample Data
+* PCAP Analysis
+* Timing Correlation
+* Website Fingerprinting
+* GNN Prediction
+* Dashboard API
+
 ---
 
 ## Roadmap
 
-### Completed ✓
-- [x] Tor network data collection
-- [x] PCAP traffic analysis
-- [x] Timing correlation engine
-- [x] Deep learning website fingerprinting
-- [x] Graph neural network implementation
-- [x] Web dashboard
-- [x] System integration tests
+**Completed**
 
-### In Progress
-- [ ] Real Tor traffic validation
-- [ ] Enhanced correlation algorithms
-- [ ] ML model training on real data
+* Tor relay collection
+* PCAP analysis pipeline
+* Timing correlation engine
+* CNN-LSTM fingerprint model
+* GNN predictor
+* Flask dashboard
+* Integration tests
 
-### Future Enhancements
-- [ ] Live traffic monitoring
-- [ ] Multi-circuit correlation
-- [ ] Blockchain integration for evidence chain
-- [ ] Automated report generation for court
+**In Progress**
+
+* Live Tor traffic validation on diverse datasets
+* Improved ensemble weighting and calibration
+* Retraining ML models on larger labeled datasets
+
+**Future**
+
+* Live monitoring mode with alerting
+* Multi-circuit correlation
+* Automated, signed evidence chain (blockchain or notarization)
+* Hardened deployment (containers, CI/CD, role-based access control)
+
 ---
 
-## Legal & Ethical Considerations
+## Legal & Ethical Notice
 
-⚠️ **Important Notice**
+**Important:** This tool is intended for authorized law enforcement and legitimate cybersecurity research. Usage of this repository may involve access to sensitive network data and must comply with:
 
-This tool is developed strictly for **law enforcement and cybersecurity research purposes**. Usage must comply with:
+* Local and national laws governing network monitoring and interception.
+* Proper authorization and documented legal authority for capturing and analyzing network traffic.
+* Privacy, civil liberties, and data protection requirements.
+* Ethical best practices in digital forensics.
 
-- Local and national laws regarding network monitoring
-- Proper authorization for traffic capture
-- Privacy regulations and civil liberties
-- Ethical guidelines for forensic investigation
-
-**Unauthorized use for surveillance or privacy invasion is strictly prohibited.**
+**Unauthorized use for surveillance or privacy invasion is strictly prohibited.** The authors and contributors are not responsible for misuse.
 
 ---
 
 ## Contributing
 
-This is a hackathon project for TN Police Hackathon 2025. Contributions, suggestions, and feedback are welcome for improving network forensics capabilities.
+Contributions that improve safety, reproducibility, model robustness, and legal/ethical safeguards are welcome. Please:
+
+1. Open issues for bugs and feature requests.
+2. Submit PRs against `main` with tests and documentation.
+3. Follow a responsible disclosure process for vulnerabilities.
 
 ---
 
 ## License
 
-Developed for TN Police Hackathon 2025 - Problem Statement #4: Tor Network User Tracing
+This project was developed for **TN Police Hackathon 2025** (Problem Statement #4). Check the repository for a specific license file if you intend to reuse or redistribute code. If none exists, contact the project maintainer for licensing details.
 
 ---
 
 ## Contact
 
-**Developer**: Yash  
-**Institution**: VIT Chennai  
-**Email**: yashwanthbalaji.2408@gmail.com  
-**GitHub**: [https://github.com/Yashwanth2408](https://github.com/Yashwanth2408)
+**Developer:** Yash
+**Institution:** VIT Chennai
+**Email:** [yashwanthbalaji.2408@gmail.com](mailto:yashwanthbalaji.2408@gmail.com)
+**GitHub:** [https://github.com/Yashwanth2408](https://github.com/Yashwanth2408)
 
 ---
 
 ## Acknowledgments
 
-- Tamil Nadu Police for hosting the hackathon
-- Tor Project for network consensus data
-- Academic research on traffic analysis and website fingerprinting
-- Open-source community for Python libraries
+* Tamil Nadu Police — TN Police Hackathon 2025
+* The Tor Project — consensus data and documentation
+* Academic research on traffic analysis, website fingerprinting, and GNNs
+* Open-source Python ecosystem
 
 ---
 
 ## References
 
-1. Tor Network Architecture and Threat Model
-2. Statistical Traffic Analysis Techniques
-3. Deep Learning for Network Traffic Classification
-4. Graph Neural Networks for Network Analysis
+1. Tor network architecture and threat modeling literature
+2. Statistical traffic analysis techniques
+3. Deep learning for encrypted traffic classification (CNN, LSTM)
+4. Graph neural networks for network analysis
 
 ---
 
-**Built with ❤️ by Yash for Cybersecurity and Law Enforcement**
-
-
-
+**Built with purpose — for authorized cybersecurity research and lawful investigations.**
