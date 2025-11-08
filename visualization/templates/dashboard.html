@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TorTrace-AI | Network Attribution System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            padding: 30px 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+            margin-bottom: 8px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+            border-color: #444;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.85em;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card .value {
+            font-size: 2.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #c0c0c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid #333;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+
+        .results-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .results-section h2::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+        }
+
+        .guard-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .guard-item {
+            background: linear-gradient(135deg, #252525 0%, #2a2a2a 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border-left: 3px solid #4caf50;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guard-item::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.05));
+            pointer-events: none;
+        }
+
+        .guard-item:hover {
+            background: linear-gradient(135deg, #2a2a2a 0%, #2f2f2f 100%);
+            transform: translateX(4px);
+            box-shadow: -4px 0 16px rgba(99, 102, 241, 0.2);
+        }
+
+        .guard-item.high-confidence {
+            border-left-color: #4caf50;
+        }
+
+        .guard-item.medium-confidence {
+            border-left-color: #ff9800;
+        }
+
+        .guard-item.low-confidence {
+            border-left-color: #f44336;
+        }
+
+        .guard-item h4 {
+            font-size: 1.2em;
+            margin-bottom: 14px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 14px 0;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .confidence-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .guard-item p {
+            color: #b0b0b0;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            color: #a5b4fc;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer p {
+            margin: 6px 0;
+        }
+
+        .footer .tech-stack {
+            margin-top: 12px;
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 1.2em;
+            color: #888;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '.';
+            }
+
+            40% {
+                content: '..';
+            }
+
+            60%,
+            100% {
+                content: '...';
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TorTrace-AI</h1>
+            <p class="subtitle">Multi-Layer Tor Network Attribution System</p>
+            <span class="badge">TN Police Hackathon 2025 | Powered by AI & Graph Neural Networks</span>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <h3>Total Tor Relays</h3>
+                <div class="value" id="totalRelays">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Guard Nodes</h3>
+                <div class="value" id="guardNodes">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Exit Nodes</h3>
+                <div class="value" id="exitNodes">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Network Bandwidth</h3>
+                <div class="value" id="bandwidth">-</div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h2>Identified Guard Nodes (Multi-Method Attribution)</h2>
+            <div class="guard-list" id="guardList">
+                <div class="loading">Loading attribution results</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 TorTrace-AI | Advanced Tor Network Analysis</p>
+            <p class="tech-stack">
+                Statistical Correlation | Deep Learning | Graph Neural Networks
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display stats
+        fetch('/api/stats')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('totalRelays').textContent = data.total_relays.toLocaleString();
+                document.getElementById('guardNodes').textContent = data.guard_nodes.toLocaleString();
+                document.getElementById('exitNodes').textContent = data.exit_nodes.toLocaleString();
+                document.getElementById('bandwidth').textContent = data.total_bandwidth_mbps + ' MB/s';
+            })
+            .catch(err => console.error('Error loading stats:', err));
+
+        // Fetch and display guard candidates
+        fetch('/api/top_guards')
+            .then(res => res.json())
+            .then(guards => {
+                const container = document.getElementById('guardList');
+                container.innerHTML = '';
+
+                if (guards.length === 0) {
+                    container.innerHTML = '<div class="loading">No guard nodes identified yet</div>';
+                    return;
+                }
+
+                guards.forEach((guard, index) => {
+                    const confidenceClass = guard.confidence >= 70 ? 'high-confidence' :
+                        guard.confidence >= 40 ? 'medium-confidence' : 'low-confidence';
+
+                    const item = document.createElement('div');
+                    item.className = `guard-item ${confidenceClass}`;
+                    item.innerHTML = `
+                        <h4>${index + 1}. ${guard.nickname} (${guard.relay_ip})</h4>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${guard.confidence}%"></div>
+                        </div>
+                        <p>Confidence: ${guard.confidence}%</p>
+                        <span class="method-badge">Method: ${guard.method}</span>
+                    `;
+                    container.appendChild(item);
+                });
+            })
+            .catch(err => {
+                console.error('Error loading guards:', err);
+                document.getElementById('guardList').innerHTML =
+                    '<div class="loading">Error loading results</div>';
+            });
+    </script>
+</body>
+
+</html>
