@@ -36,54 +36,24 @@ TorTrace-AI implements a novel multi-layer attribution approach that combines:
 
 ## Real Tor Traffic Validation
 
-TorTrace-AI was tested end-to-end on live Tor traffic captured from a running Tor client. Below is proof-of-analysis with screenshots and logs of each step:
+## Real Tor Traffic Validation
 
-### 1. PCAP Traffic Analyzer Output
+Our system was tested end-to-end on live Tor traffic captured from a running Tor client. Below are proof-of-analysis screenshots from each pipeline step:
 
-======================================================================
-TorTrace-AI: PCAP Traffic Analyzer
-2025-11-08 ... INFO - Analysis complete: 2 Tor flows detected
+### 1. PCAP Traffic Analyzer Output  
+![PCAP Traffic Analyzer Output](data/output_screenshots/PCAP Traffic Analyzer Output.png)
 
-Analysis Results:
-Total packets: 28
-Tor flows detected: 2
-Non-Tor packets: 0
+### 2. Timing Correlation Output  
+![Timing Correlation Output](data/output_screenshots/Timing Correlation Output.png)
 
-Detected Tor Connections (showing first 10):
+### 3. Website Fingerprinting Output  
+![Website Fingerprinting Output](data/output_screenshots/Website Fingerprinting Output.png)
 
-83.217.9.73 -> 83.217.9.73
-Relay: salsedo | Guard: True | Exit: True
-Packets: 14, Bytes: 2616, Duration: 64.942s
+### 4. Graph Neural Network (GNN) Predictor Output  
+![Graph Neural Network (GNN) Predictor Output](data/output_screenshots/Graph Neural Network (GNN) Predictor Output.png)
 
-### 2. Timing Correlation Output
-
-======================================================================
-TorTrace-AI: Timing Correlation Engine
-2025-11-08 ... INFO - Loaded 2 traffic patterns
-2025-11-08 ... INFO - Found 0 guard node candidates
-No guard node candidates found
-
-
-### 3. Website Fingerprinting Output
-
-Website Identification Results:
-Unknown | [░░░░░░░░░░] 2.4%
-via salsedo (83.217.9.73)
-
-### 4. Graph Neural Network (GNN) Predictor Output
-
-Top Probable Guard Nodes (GNN Analysis):
- hubbabubbaABC (83.108.59.221 )
-Confidence: [██████████] 100%
-GNN Score: ...
-...
-Found 10 guard node candidates
-
-### 5. Dashboard Visualization
-
-_Screenshot – Example:_
-![Dashboard Screenshot](dashboard_screenshot.png)
-*(Replace with your actual dashboard screenshot filename)*
+### 5. Dashboard Visualization  
+![Dashboard Screenshot](data/output_screenshots/Dashboard.png)
 
 **What this proves:**  
 - System successfully processed real Tor traffic, detected active relays, and performed full attribution.
