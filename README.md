@@ -1,4 +1,4 @@
-# 🕵️‍♂️ TorTrace-AI
+# TorTrace-AI
 
 **Multi-Layer Tor Network Attribution System**
 *Advanced AI-powered network forensics for identifying probable Tor entry (guard) nodes using statistical correlation, deep learning, and graph neural networks.*
