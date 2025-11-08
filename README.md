@@ -214,7 +214,24 @@ Access via: [http://localhost:5000](http://localhost:5000)
 
 ## Usage Examples
 
-... *(keep your existing code snippets here, unchanged)*
+### Real Traffic Capture
+
+Capture Tor traffic
+sudo tcpdump -i any -w capture.pcap 'port 9001 or port 9030'
+
+Move to analysis directory
+mv capture.pcap data/pcap_files/sample.pcap
+
+Analyze
+python traffic_analysis/pcap_analyzer.py
+
+### Programmatic API
+
+from correlation.timing_correlator import TimingCorrelator
+
+correlator = TimingCorrelator()
+patterns = correlator.load_traffic_patterns('data/pcap_files/analysis_results.json')
+candidates = correlator.find_guard_node_candidates(patterns)
 
 ---
 
@@ -229,37 +246,92 @@ Access via: [http://localhost:5000](http://localhost:5000)
 
 ## Validation & Testing
 
-... *(keep your testing section unchanged)*
+Run full system test
+python test_system.py
+
+Expected: 7/7 tests passed
+- Tor Network Collection
+- Traffic Generation
+- Traffic Analysis
+- Timing Correlation
+- Website Fingerprinting
+- GNN Prediction
+- Dashboard API
+
 
 ---
 
 ## Project Structure
 
-... *(keep your structure section unchanged)*
-
+TorTrace-AI/
+├── data_collection/
+│ └── tor_collector.py # Collects Tor relay data
+├── traffic_analysis/
+│ ├── pcap_analyzer.py # Analyzes PCAP files
+│ └── generate_sample_traffic.py # Creates test data
+├── correlation/
+│ └── timing_correlator.py # Statistical correlation
+├── ml_models/
+│ ├── website_fingerprinter.py # Deep learning model
+│ └── gnn_guard_predictor.py # Graph neural network
+├── visualization/
+│ ├── dashboard_app.py # Flask backend
+│ └── templates/
+│ └── dashboard.html # Web interface
+├── data/
+│ ├── tor_relays.db # SQLite database
+│ └── pcap_files/ # Traffic captures
+├── test_system.py # Integration tests
+└── README.md # This file
 ---
 
 ## Roadmap
 
-... *(keep unchanged)*
+### Completed ✓
+- [x] Tor network data collection
+- [x] PCAP traffic analysis
+- [x] Timing correlation engine
+- [x] Deep learning website fingerprinting
+- [x] Graph neural network implementation
+- [x] Web dashboard
+- [x] System integration tests
 
+### In Progress
+- [ ] Real Tor traffic validation
+- [ ] Enhanced correlation algorithms
+- [ ] ML model training on real data
+
+### Future Enhancements
+- [ ] Live traffic monitoring
+- [ ] Multi-circuit correlation
+- [ ] Blockchain integration for evidence chain
+- [ ] Automated report generation for court
 ---
 
 ## Legal & Ethical Considerations
 
-... *(keep unchanged)*
+⚠️ **Important Notice**
+
+This tool is developed strictly for **law enforcement and cybersecurity research purposes**. Usage must comply with:
+
+- Local and national laws regarding network monitoring
+- Proper authorization for traffic capture
+- Privacy regulations and civil liberties
+- Ethical guidelines for forensic investigation
+
+**Unauthorized use for surveillance or privacy invasion is strictly prohibited.**
 
 ---
 
 ## Contributing
 
-... *(keep unchanged)*
+This is a hackathon project for TN Police Hackathon 2025. Contributions, suggestions, and feedback are welcome for improving network forensics capabilities.
 
 ---
 
 ## License
 
-... *(keep unchanged)*
+Developed for TN Police Hackathon 2025 - Problem Statement #4: Tor Network User Tracing
 
 ---
 
@@ -274,13 +346,19 @@ Access via: [http://localhost:5000](http://localhost:5000)
 
 ## Acknowledgments
 
-... *(keep unchanged)*
+- Tamil Nadu Police for hosting the hackathon
+- Tor Project for network consensus data
+- Academic research on traffic analysis and website fingerprinting
+- Open-source community for Python libraries
 
 ---
 
 ## References
 
-... *(keep unchanged)*
+1. Tor Network Architecture and Threat Model
+2. Statistical Traffic Analysis Techniques
+3. Deep Learning for Network Traffic Classification
+4. Graph Neural Networks for Network Analysis
 
 ---
 
