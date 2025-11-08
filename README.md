@@ -314,10 +314,10 @@ Developed for TN Police Hackathon 2025 - Problem Statement #4: Tor Network User 
 
 ## Contact
 
-**Developer**: [Your Name]
-**Institution**: VIT Vellore
-**Email**: [Your Email]
-**GitHub**: [Your GitHub]
+**Developer**: Yash
+**Institution**: VIT Chennai
+**Email**: yashwanthbalaji.2408@gmail.com
+**GitHub**: https://github.com/Yashwanth2408
 
 ---
 
