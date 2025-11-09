@@ -385,8 +385,11 @@ This project was developed for **TN Police Hackathon 2025** (Problem Statement #
 ## Contact
 
 **Developer:** Yash
+
 **Institution:** VIT Chennai
+
 **Email:** [yashwanthbalaji.2408@gmail.com](mailto:yashwanthbalaji.2408@gmail.com)
+
 **GitHub:** [https://github.com/Yashwanth2408](https://github.com/Yashwanth2408)
 
 ---
