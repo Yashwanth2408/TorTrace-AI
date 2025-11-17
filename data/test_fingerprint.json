@@ -1,0 +1,21 @@
+{
+  "analysis_type": "Deep Learning Website Fingerprinting",
+  "model_architecture": "CNN-LSTM",
+  "total_flows": 2,
+  "identifications": [
+    {
+      "flow_id": "83.217.9.73->172.21.245.0",
+      "predicted_website": "Unknown",
+      "confidence": 0.02263040468096733,
+      "tor_relay": "83.217.9.73",
+      "relay_nickname": "salsedo"
+    },
+    {
+      "flow_id": "172.21.245.0->83.217.9.73",
+      "predicted_website": "Unknown",
+      "confidence": 0.022631194442510605,
+      "tor_relay": "83.217.9.73",
+      "relay_nickname": "salsedo"
+    }
+  ]
+}

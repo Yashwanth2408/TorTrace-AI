@@ -1,0 +1,100 @@
+{
+  "analysis_time": "2025-11-09T19:33:57.578996",
+  "analysis_method": "Graph Neural Network",
+  "network_size": 478,
+  "network_edges": 0,
+  "total_guard_nodes": 326,
+  "predictions": [
+    {
+      "relay_ip": "83.108.59.221",
+      "nickname": "hubbabubbaABC",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 20000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "204.137.14.106",
+      "nickname": "SENDNOOSEplz",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 16000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "178.218.144.18",
+      "nickname": "titamon3",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 19000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "95.111.230.178",
+      "nickname": "skylarkRelay",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 13000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "185.184.70.225",
+      "nickname": "9g4net3",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 11000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "45.95.169.110",
+      "nickname": "Quetzalcoatl",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 12000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "84.234.21.98",
+      "nickname": "StarAppsMobley",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 65000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "80.239.189.84",
+      "nickname": "ernies",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 14000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "185.220.101.33",
+      "nickname": "ForPrivacyNET",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 51000,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    },
+    {
+      "relay_ip": "128.140.60.104",
+      "nickname": "ITSCTheLordMyLight",
+      "confidence": 100,
+      "gnn_score": 0.000836820083682003,
+      "bandwidth": 4300,
+      "is_observed": false,
+      "analysis_method": "Graph Neural Network"
+    }
+  ],
+  "methodology": "Graph-based analysis using PageRank, betweenness centrality, and degree centrality to identify probable guard nodes from network topology and observed traffic patterns."
+}

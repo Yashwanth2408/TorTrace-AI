@@ -1,0 +1,20 @@
+{
+  "analysis_time": "2025-11-08T17:39:37.122645",
+  "total_candidates": 1,
+  "guard_nodes": [
+    {
+      "relay_ip": "83.108.59.221",
+      "nickname": "hubbabubbaABC",
+      "confidence": 65,
+      "avg_correlation": 0.6026321829558553,
+      "num_matches": 1,
+      "matches": [
+        {
+          "correlation": 0.6026321829558553,
+          "exit_relay": "45.95.169.110",
+          "flow": "83.108.59.221->192.168.1.100"
+        }
+      ]
+    }
+  ]
+}

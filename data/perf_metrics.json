@@ -1,0 +1,149 @@
+{
+  "per_file": [
+    {
+      "pcap": "sample.pcap",
+      "duration_sec": 12.6,
+      "success": true
+    },
+    {
+      "pcap": "live_20251113_235913.pcap",
+      "duration_sec": 1.12,
+      "success": false
+    },
+    {
+      "pcap": "live_20251113_235058.pcap",
+      "duration_sec": 1.14,
+      "success": false
+    },
+    {
+      "pcap": "live_20251113_231338.pcap",
+      "duration_sec": 1.15,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_202230.pcap",
+      "duration_sec": 5.58,
+      "success": true
+    },
+    {
+      "pcap": "live_20251109_202006.pcap",
+      "duration_sec": 5.36,
+      "success": true
+    },
+    {
+      "pcap": "live_20251109_201028.pcap",
+      "duration_sec": 1.09,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_213501.pcap",
+      "duration_sec": 5.44,
+      "success": true
+    },
+    {
+      "pcap": "live_20251109_202738.pcap",
+      "duration_sec": 1.12,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_203154.pcap",
+      "duration_sec": 1.13,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_203652.pcap",
+      "duration_sec": 1.13,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_212532.pcap",
+      "duration_sec": 1.12,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_201240.pcap",
+      "duration_sec": 1.13,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_211050.pcap",
+      "duration_sec": 1.17,
+      "success": false
+    },
+    {
+      "pcap": "live_20251113_235427.pcap",
+      "duration_sec": 1.15,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_205542.pcap",
+      "duration_sec": 1.11,
+      "success": false
+    },
+    {
+      "pcap": "real_capture.pcap",
+      "duration_sec": 5.55,
+      "success": true
+    },
+    {
+      "pcap": "live_20251109_202411.pcap",
+      "duration_sec": 1.05,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_213053.pcap",
+      "duration_sec": 1.12,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_200350.pcap",
+      "duration_sec": 1.33,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_200145.pcap",
+      "duration_sec": 1.14,
+      "success": false
+    },
+    {
+      "pcap": "live_20251113_233836.pcap",
+      "duration_sec": 1.16,
+      "success": false
+    },
+    {
+      "pcap": "live_20251114_000130.pcap",
+      "duration_sec": 1.15,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_200456.pcap",
+      "duration_sec": 1.22,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_200038.pcap",
+      "duration_sec": 1.4,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_213816.pcap",
+      "duration_sec": 1.12,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_200251.pcap",
+      "duration_sec": 1.4,
+      "success": false
+    },
+    {
+      "pcap": "live_20251109_202113.pcap",
+      "duration_sec": 5.61,
+      "success": true
+    }
+  ],
+  "batch_total_sec": 65.78,
+  "total_pcaps": 28,
+  "successful": 6,
+  "no_tor_flows": 22,
+  "failed": 0
+}

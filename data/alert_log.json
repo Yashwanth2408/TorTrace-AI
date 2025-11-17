@@ -1,0 +1,140 @@
+[
+  {
+    "timestamp": "2025-11-16T00:49:25.563167",
+    "alerts": [
+      {
+        "pcap": "data/pcap_files/sample.pcap",
+        "nickname": "hubbabubbaABC",
+        "confidence": 79.0,
+        "ip": "83.108.59.221"
+      },
+      {
+        "pcap": "data/pcap_files/sample.pcap",
+        "nickname": "SENDNOOSEplz",
+        "confidence": 57.0,
+        "ip": "204.137.14.106"
+      },
+      {
+        "pcap": "data/pcap_files/sample.pcap",
+        "nickname": "titamon3",
+        "confidence": 78.0,
+        "ip": "178.218.144.18"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T00:49:34.561899",
+    "alerts": [
+      {
+        "pcap": "data/pcap_files/live_20251109_202230.pcap",
+        "nickname": "hubbabubbaABC",
+        "confidence": 97.0,
+        "ip": "83.108.59.221"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_202230.pcap",
+        "nickname": "SENDNOOSEplz",
+        "confidence": 95.0,
+        "ip": "204.137.14.106"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_202230.pcap",
+        "nickname": "titamon3",
+        "confidence": 95.0,
+        "ip": "178.218.144.18"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T00:49:39.924896",
+    "alerts": [
+      {
+        "pcap": "data/pcap_files/live_20251109_202006.pcap",
+        "nickname": "hubbabubbaABC",
+        "confidence": 57.0,
+        "ip": "83.108.59.221"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_202006.pcap",
+        "nickname": "SENDNOOSEplz",
+        "confidence": 93.0,
+        "ip": "204.137.14.106"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_202006.pcap",
+        "nickname": "titamon3",
+        "confidence": 68.0,
+        "ip": "178.218.144.18"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T00:49:46.450172",
+    "alerts": [
+      {
+        "pcap": "data/pcap_files/live_20251109_213501.pcap",
+        "nickname": "hubbabubbaABC",
+        "confidence": 94.0,
+        "ip": "83.108.59.221"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_213501.pcap",
+        "nickname": "SENDNOOSEplz",
+        "confidence": 69.0,
+        "ip": "204.137.14.106"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_213501.pcap",
+        "nickname": "titamon3",
+        "confidence": 72.0,
+        "ip": "178.218.144.18"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T00:50:01.058941",
+    "alerts": [
+      {
+        "pcap": "data/pcap_files/real_capture.pcap",
+        "nickname": "hubbabubbaABC",
+        "confidence": 80.0,
+        "ip": "83.108.59.221"
+      },
+      {
+        "pcap": "data/pcap_files/real_capture.pcap",
+        "nickname": "SENDNOOSEplz",
+        "confidence": 68.0,
+        "ip": "204.137.14.106"
+      },
+      {
+        "pcap": "data/pcap_files/real_capture.pcap",
+        "nickname": "titamon3",
+        "confidence": 93.0,
+        "ip": "178.218.144.18"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T00:50:18.750042",
+    "alerts": [
+      {
+        "pcap": "data/pcap_files/live_20251109_202113.pcap",
+        "nickname": "hubbabubbaABC",
+        "confidence": 78.0,
+        "ip": "83.108.59.221"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_202113.pcap",
+        "nickname": "SENDNOOSEplz",
+        "confidence": 70.0,
+        "ip": "204.137.14.106"
+      },
+      {
+        "pcap": "data/pcap_files/live_20251109_202113.pcap",
+        "nickname": "titamon3",
+        "confidence": 78.0,
+        "ip": "178.218.144.18"
+      }
+    ]
+  }
+]
