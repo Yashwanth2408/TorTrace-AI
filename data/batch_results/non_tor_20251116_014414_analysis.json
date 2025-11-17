@@ -1,0 +1,7 @@
+{
+  "pcap_file": "data/pcap_files/non_tor_20251116_014414.pcap",
+  "analysis_time": "2025-11-16T22:45:15.545388",
+  "total_packets": 1528,
+  "tor_flows": 0,
+  "timing_patterns": []
+}

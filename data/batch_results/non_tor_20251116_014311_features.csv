@@ -1,0 +1,2 @@
+packet_count,total_bytes,start_time,end_time,burst_count,avg_burst_duration,max_burst_len,outgoing_packet_count,incoming_packet_count,outgoing_bytes,incoming_bytes,avg_payload_entropy,syn_count,ack_count,fin_count,rst_count,packet_size_entropy,label
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,nontor

@@ -1,0 +1,660 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TorTrace-AI | Network Attribution System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #161616;
+            --accent-primary: #ff0000;
+            --accent-secondary: #dc143c;
+            --accent-glow: #ff4444;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #666666;
+            --success: #00ff41;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        /* Red glow effects */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            border: 1px solid var(--accent-primary);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease-out;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            animation: scanline 4s infinite;
+        }
+
+        @keyframes scanline {
+            to {
+                left: 100%;
+            }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--accent-primary);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.4);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        }
+
+        .stat-value {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .card:nth-of-type(1) {
+            animation-delay: 0.5s;
+        }
+
+        .card:nth-of-type(2) {
+            animation-delay: 0.6s;
+        }
+
+        .card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 16px;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--accent-primary);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 0.95em;
+        }
+
+        tr {
+            transition: all 0.3s ease;
+        }
+
+        tr:hover {
+            background: rgba(255, 0, 0, 0.05);
+            border-left: 2px solid var(--accent-primary);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 2px;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-rank {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            min-width: 32px;
+            text-align: center;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .badge-success {
+            background: transparent;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge-count {
+            background: transparent;
+            color: var(--accent-primary);
+            border: 1px solid var(--accent-primary);
+        }
+
+        /* Download Section */
+        .download-section {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            text-align: center;
+            animation: fadeInUp 1s ease-out backwards;
+            animation-delay: 0.7s;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--accent-primary);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 2px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.6);
+            background: var(--accent-secondary);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 40px;
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .footer p {
+            margin: 8px 0;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        /* Relay nickname styling */
+        .relay-name {
+            font-weight: 700;
+            color: var(--accent-primary);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* IP Address styling */
+        .ip-address {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        /* Glitch effect for title */
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 var(--accent-primary), -0.05em -0.025em 0 var(--success);
+            }
+
+            14% {
+                text-shadow: 0.05em 0 0 var(--accent-primary), -0.05em -0.025em 0 var(--success);
+            }
+
+            15% {
+                text-shadow: -0.05em -0.025em 0 var(--accent-primary), 0.025em 0.025em 0 var(--success);
+            }
+
+            49% {
+                text-shadow: -0.05em -0.025em 0 var(--accent-primary), 0.025em 0.025em 0 var(--success);
+            }
+
+            50% {
+                text-shadow: 0.025em 0.05em 0 var(--accent-primary), 0.05em 0 0 var(--success);
+            }
+
+            99% {
+                text-shadow: 0.025em 0.05em 0 var(--accent-primary), 0.05em 0 0 var(--success);
+            }
+
+            100% {
+                text-shadow: -0.025em 0 0 var(--accent-primary), -0.025em -0.025em 0 var(--success);
+            }
+        }
+
+        .header h1:hover {
+            animation: glitch 0.5s;
+        }
+
+        .download-btn,
+        button[type="submit"],
+        input[type="button"],
+        input[type="submit"] {
+            font-family: 'Share Tech Mono', 'Rajdhani', Arial, monospace, sans-serif !important;
+            font-weight: 700;
+            font-size: 1.13em;
+            letter-spacing: 1px;
+        }
+
+        /* Success/Error Message Enhancements */
+        .message {
+            background: rgba(255, 0, 0, 0.19);
+            color: #fff;
+            border: 1.5px solid var(--accent-primary);
+            border-radius: 3px;
+            font-family: 'Share Tech Mono', monospace;
+            padding: 17px 14px 14px 14px;
+            margin: 0 auto 16px auto;
+            max-width: 450px;
+            text-align: center;
+            font-size: 1.05em;
+        }
+
+        /* Loader Spinner Styling */
+        .processing-loader {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            border-top: 3px solid var(--bg-secondary);
+            animation: spin 0.9s linear infinite;
+            margin-top: 18px;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .header nav a { text-decoration: none !important; }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <h1>TorTrace-AI</h1>
+            <p>Multi-Layer Tor Network Attribution System</p>
+            <div style="text-align: center; margin-bottom:18px;">
+                <nav>
+                    <a href="/" style="color: #fff; margin-left: 20px; font-size:1.2em;">
+                        Dashboard
+                    </a>
+                    <a href="/map" style="color: #fff; margin-left: 20px; font-size:1.2em;">
+                        Geographic Map
+                    </a>
+                    <a href="/alerts" style="margin-left:20px; color:#fff; font-size:1.2em;">
+                        <span id="alert-bell" style="position:relative;">
+                            🔔
+                            <span id="alert-count"
+                                style="position:absolute;top:-8px;right:-12px;background:#fff;color:red;padding:2px 6px;border-radius:10px;font-size:13px;">
+                                {{ alerts|length if alerts else 0 }}
+                            </span>
+                        </span>
+                    </a>
+                    <a href="/batch_upload" style="color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow);margin-left: 20px; font-size:1.2em">Batch Prediction Upload</a>
+                    <a href="/metrics" style="color: #fff; margin-left: 20px;font-size:1.2em;">Performance Metrics</a>
+                </nav>
+            </div>
+
+        </div>
+
+
+
+
+        <!-- CARD for Upload -->
+        <div class="card" style="max-width:700px; margin:40px auto;">
+            <!-- Card Header -->
+            <div class="card-header">
+                <h2 class="card-title">Batch CSV Upload</h2>
+            </div>
+            <div
+                style="background:#1a1a1a; padding:18px; border-radius:4px; margin-bottom:20px; border-left:3px solid var(--accent-primary);">
+                <h3 style="color:var(--accent-primary); font-size:1.2em; margin-bottom:10px;">Upload Instructions</h3>
+                <p style="color:var(--text-secondary); font-size:0.95em; line-height:1.6;">
+                    <strong>Required Format:</strong> CSV file with exactly 26 network flow features.<br>
+                    <strong>Column Names:</strong> Must match model feature names exactly (with spaces).<br>
+                    <strong>Example:</strong> Download a pre-formatted sample CSV below to get started.<br>
+                    <strong>File Size:</strong> Max 50MB (approximately 100,000 flows).
+                </p>
+            </div>
+
+            <details style="margin-bottom:18px; background:#161616; padding:14px; border-radius:4px;">
+                <summary style="cursor:pointer; color:var(--accent-primary); font-weight:600;">
+                    View Required Columns (Click to expand)
+                </summary>
+                <pre style="color:var(--text-secondary); font-size:0.85em; margin-top:12px; overflow-x:auto;">
+                            {{ required_features|join(', ') }}
+                                </pre>
+            </details>
+
+
+            <!-- Sample CSV Generation Buttons -->
+            <div style="text-align:center; margin-bottom:20px;">
+                <a href="/generate_sample_csv" class="download-btn"
+                    style="background:#161616; color:var(--text-secondary); display:inline-block; margin-right:10px;">
+                    ⬇ Generate Sample CSV (5 rows)
+                </a>
+                <a href="/generate_large_sample" class="download-btn"
+                    style="background:#161616; color:var(--text-secondary); display:inline-block; font-size:1em;">
+                    ⬇ Generate Large Test (1000 rows)
+                </a>
+            </div>
+
+            <form action="/batch_predict" method="POST" enctype="multipart/form-data"
+                style="text-align:center; margin-top:28px;">
+                <label for="csv-upload" style="display:block; margin:24px auto 12px auto; max-width:400px;">
+                    <input id="csv-upload" type="file" name="file" accept=".csv" required style="display:none;"
+                        onchange="document.getElementById('csv-file-label').innerText = this.files[0]?.name || 'CHOOSE CSV FILE';" />
+                    <span id="csv-file-label" class="download-btn"
+                        style="background:var(--accent-primary); color:#fff;width:100%;font-weight:700;font-size:1.13em;letter-spacing:1.5px;cursor:pointer;display:inline-block;margin-bottom:8px;transition:.2s;">
+                        CHOOSE CSV FILE
+                    </span>
+                </label>
+                <br>
+                <button class="download-btn" type="submit" style="
+                              background: linear-gradient(90deg, var(--accent-primary) 65%, var(--accent-secondary));
+                              color:#fff;
+                              font-family:'Share Tech Mono', 'Rajdhani', Arial, monospace, sans-serif;
+                              font-weight:700;
+                              font-size:1.13em;
+                              width:270px;
+                              margin-top:18px;
+                              letter-spacing:2px;
+                              box-shadow:0 0 20px rgba(255,0,0,.45);
+                              transition:.2s;">
+                    UPLOAD & PREDICT
+                </button>
+            </form>
+
+
+
+            <!-- Success/Error Message -->
+            {% if message %}
+            <div class="message" style="margin-top:22px;" aria-live="polite">{{ message|safe }}</div>
+            {% endif %}
+        </div>
+
+
+        <!-- FOOTER (optional but good for look) -->
+        <div class="footer">
+            <p><strong>TorTrace-AI v1.0</strong> | Developed for TN Police Hackathon 2025</p>
+            <p>© 2025 Yash | For Authorized Use Only</p>
+        </div>
+    </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function () {
+            const btn = this.querySelector('button[type="submit"]');
+            btn.innerText = 'Processing...';
+            btn.disabled = true;
+            btn.style.opacity = 0.7;
+            let spinner = document.createElement('div');
+            spinner.className = 'processing-loader';
+            this.appendChild(spinner);
+        });
+    </script>
+
+</body>

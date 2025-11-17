@@ -1,0 +1,7 @@
+{
+  "pcap_file": "data/pcap_files/live_20251109_211050.pcap",
+  "analysis_time": "2025-11-16T03:19:30.653564",
+  "total_packets": 21,
+  "tor_flows": 0,
+  "timing_patterns": []
+}

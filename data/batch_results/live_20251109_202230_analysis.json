@@ -1,0 +1,52 @@
+{
+  "pcap_file": "data/pcap_files/live_20251109_202230.pcap",
+  "analysis_time": "2025-11-16T22:15:23.510221",
+  "total_packets": 4,
+  "tor_flows": 2,
+  "timing_patterns": [
+    {
+      "flow_id": "136.243.174.159->172.21.245.0",
+      "packet_count": 2,
+      "duration": 29.976878881454468,
+      "total_bytes": 108,
+      "avg_packet_size": 54.0,
+      "inter_packet_times": [
+        29.976878881454468
+      ],
+      "packet_sizes": [
+        54,
+        54
+      ],
+      "directions": [
+        -1,
+        -1
+      ],
+      "tor_relay": "136.243.174.159",
+      "relay_nickname": "MaverickPass",
+      "is_guard": true,
+      "is_exit": false
+    },
+    {
+      "flow_id": "172.21.245.0->136.243.174.159",
+      "packet_count": 2,
+      "duration": 29.97687602043152,
+      "total_bytes": 132,
+      "avg_packet_size": 66.0,
+      "inter_packet_times": [
+        29.97687602043152
+      ],
+      "packet_sizes": [
+        66,
+        66
+      ],
+      "directions": [
+        1,
+        1
+      ],
+      "tor_relay": "136.243.174.159",
+      "relay_nickname": "MaverickPass",
+      "is_guard": true,
+      "is_exit": false
+    }
+  ]
+}

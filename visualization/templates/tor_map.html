@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TorTrace-AI | Geographic Map</title>
+
+    <!-- Leaflet and Dependencies -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #161616;
+            --accent-primary: #ff0000;
+            --accent-secondary: #dc143c;
+            --accent-glow: #ff4444;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #666666;
+            --success: #00ff41;
+            --border: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        /* Red glow effects */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            border: 1px solid var(--accent-primary);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease-out;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            animation: scanline 4s infinite;
+        }
+
+        @keyframes scanline {
+            to {
+                left: 100%;
+            }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--accent-primary);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .header nav {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .header nav a {
+            color: var(--text-primary);
+            margin-left: 20px;
+            font-size: 1.2em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .header nav a:hover {
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Map Card */
+        .map-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out backwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .map-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+        .map-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        }
+
+        .map-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* Map Container */
+        #map_container {
+            width: 100%;
+            height: 70vh;
+            min-height: 500px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .leaflet-container {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--bg-secondary) !important;
+            color: var(--text-primary);
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--accent-primary);
+            box-shadow: 0 0 20px var(--accent-glow);
+            border-radius: 4px;
+        }
+
+        .leaflet-popup-content {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-primary);
+            margin: 15px;
+        }
+
+        .leaflet-popup-content h4 {
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .leaflet-popup-content table {
+            width: 100%;
+            font-size: 0.9em;
+            border-collapse: collapse;
+        }
+
+        .leaflet-popup-content td {
+            padding: 5px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .leaflet-popup-content td:first-child {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .leaflet-popup-tip {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 40px;
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .footer p {
+            margin: 8px 0;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header nav a {
+                font-size: 1em;
+                margin-left: 10px;
+            }
+
+            #map_container {
+                height: 50vh;
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+
+        <div class="header">
+            <h1>TorTrace-AI</h1>
+            <p>Multi-Layer Tor Network Attribution System</p>
+            <div style="text-align: center; margin-bottom:18px;">
+                <nav>
+                    <a href="/" style="color: #fff; margin-left: 20px;font-size:1.0em;">
+                        Dashboard
+                    </a>
+                    <a href="/map"
+                        style="color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow);margin-left: 20px; font-size:1.2em;">
+                        Geographic Map
+                    </a>
+                    <a href="/alerts">🔔</a>
+                    <a href="/batch_upload" style="margin-left:20px; color:#fff; font-size:1.0em;">Batch
+                        Prediction Upload</a>
+                    <a href="/metrics" style="color: #fff; margin-left: 20px; font-size:1.0em;">Performance
+                        Metrics</a>
+                </nav>
+            </div>
+        
+        </div>
+
+        <!-- Map Card -->
+        <div class="map-card">
+            <h2 class="map-title">Live Guard Node Detection Map</h2>
+            <div id="map_container"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>TorTrace-AI v1.0</strong> | Developed for TN Police Hackathon 2025</p>
+            <p>© 2025 Yash | For Authorized Use Only</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize map
+        var map = L.map('map_container', {
+            center: [48.8732, -22.6675],
+            zoom: 3,
+            zoomControl: true,
+            preferCanvas: false
+        });
+
+        // Add scale control
+        L.control.scale().addTo(map);
+
+        // Dark tile layer matching dashboard theme
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Modular function to add guard markers
+        function addGuardMarker(lat, lon, data) {
+            var icon = L.AwesomeMarkers.icon({
+                markerColor: "red",
+                iconColor: "white",
+                icon: "exclamation-triangle",
+                prefix: "glyphicon",
+                extraClasses: "fa-rotate-0"
+            });
+
+            var marker = L.marker([lat, lon]).addTo(map);
+            marker.setIcon(icon);
+
+            var popupHtml = `
+                <div>
+                    <h4>${data.nickname}</h4>
+                    <table>
+                        <tr><td><b>IP:</b></td><td>${data.ip}</td></tr>
+                        <tr><td><b>Confidence:</b></td><td style="color:var(--accent-primary);">${data.confidence}%</td></tr>
+                        <tr><td><b>Detections:</b></td><td>${data.detections}</td></tr>
+                        <tr><td><b>Country:</b></td><td>${data.country}</td></tr>
+                        <tr><td><b>City:</b></td><td>${data.city}</td></tr>
+                        <tr><td><b>ISP:</b></td><td>${data.isp}</td></tr>
+                    </table>
+                </div>`;
+
+            marker.bindPopup(popupHtml, { maxWidth: 300 });
+            marker.bindTooltip(`${data.nickname} (${data.confidence}%)`, { sticky: true });
+
+            return marker;
+        }
+
+        // Add guard markers
+        addGuardMarker(59.307, 10.4191, {
+            nickname: "hubbabubbaABC",
+            ip: "83.108.59.221",
+            confidence: 94.0,
+            detections: 6,
+            country: "Norway",
+            city: "Tønsberg",
+            isp: "TELENOR-INTERNET"
+        });
+
+        addGuardMarker(41.8403, -87.6137, {
+            nickname: "SENDNOOSEplz",
+            ip: "204.137.14.106",
+            confidence: 97.0,
+            detections: 6,
+            country: "United States",
+            city: "Chicago",
+            isp: "Atomic Holdings LLC"
+        });
+
+        addGuardMarker(45.4722, 9.1922, {
+            nickname: "titamon3",
+            ip: "178.218.144.18",
+            confidence: 96.0,
+            detections: 6,
+            country: "Italy",
+            city: "Milan",
+            isp: "Lowhosting services of Davide Gennari"
+        });
+
+        // Add circle markers for visual emphasis
+        L.circleMarker([59.307, 10.4191], {
+            color: "#ff0000",
+            fillColor: "#ff0000",
+            fillOpacity: 0.3,
+            radius: 14.4,
+            weight: 2
+        }).addTo(map);
+
+        L.circleMarker([41.8403, -87.6137], {
+            color: "#ff0000",
+            fillColor: "#ff0000",
+            fillOpacity: 0.3,
+            radius: 14.7,
+            weight: 2
+        }).addTo(map);
+
+        L.circleMarker([45.4722, 9.1922], {
+            color: "#ff0000",
+            fillColor: "#ff0000",
+            fillOpacity: 0.3,
+            radius: 14.6,
+            weight: 2
+        }).addTo(map);
+
+        // Add heatmap layer
+        var heatData = [
+            [59.307, 10.4191],
+            [41.8403, -87.6137],
+            [45.4722, 9.1922]
+        ];
+
+        var heat = L.heatLayer(heatData, {
+            minOpacity: 0.5,
+            maxZoom: 10,
+            radius: 25,
+            blur: 35,
+            gradient: {
+                0.0: "blue",
+                0.5: "yellow",
+                1.0: "red"
+            }
+        }).addTo(map);
+    </script>
+</body>
+
+</html>

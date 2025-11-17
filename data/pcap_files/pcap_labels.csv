@@ -1,0 +1,10 @@
+filename,label
+live_20251109_202006.pcap,tor
+live_20251109_202113.pcap,tor
+live_20251109_202230.pcap,tor
+live_20251109_213501.pcap,tor
+real_capture.pcap,tor
+sample.pcap,tor
+non_tor_20251116_014311.pcap,nontor
+non_tor_20251116_014414.pcap,nontor
+non_tor_20251116_031104.pcap,nontor

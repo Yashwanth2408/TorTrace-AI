@@ -1,0 +1,3 @@
+src_ip,dst_ip,src_port,dst_port,direction,packet_count,total_bytes,start_time,end_time,burst_count,avg_burst_duration,max_burst_len,outgoing_packet_count,incoming_packet_count,outgoing_bytes,incoming_bytes,avg_payload_entropy,syn_count,ack_count,fin_count,rst_count,packet_size_entropy,label
+136.243.174.159,172.21.245.0,9100,58082,incoming,2,108,1762704306.208979,1762704336.057405,2,0.0,1,0,2,0,108,0,0,0,0,0,0,0,tor
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,nontor

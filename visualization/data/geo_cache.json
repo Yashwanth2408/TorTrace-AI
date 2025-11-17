@@ -1,0 +1,32 @@
+{
+  "83.108.59.221": {
+    "ip": "83.108.59.221",
+    "lat": 59.307,
+    "lon": 10.4191,
+    "country": "Norway",
+    "country_code": "NO",
+    "city": "T\u00f8nsberg",
+    "region": "Vestfold",
+    "isp": "TELENOR-INTERNET"
+  },
+  "204.137.14.106": {
+    "ip": "204.137.14.106",
+    "lat": 41.8403,
+    "lon": -87.6137,
+    "country": "United States",
+    "country_code": "US",
+    "city": "Chicago",
+    "region": "Illinois",
+    "isp": "Atomic Holdings LLC"
+  },
+  "178.218.144.18": {
+    "ip": "178.218.144.18",
+    "lat": 45.4722,
+    "lon": 9.1922,
+    "country": "Italy",
+    "country_code": "IT",
+    "city": "Milan",
+    "region": "Lombardy",
+    "isp": "Lowhosting services of Davide Gennari"
+  }
+}

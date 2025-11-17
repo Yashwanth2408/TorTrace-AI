@@ -1,0 +1,21 @@
+{
+  "analysis_type": "Deep Learning Website Fingerprinting",
+  "model_architecture": "CNN-LSTM",
+  "total_flows": 2,
+  "identifications": [
+    {
+      "flow_id": "136.243.174.159->172.21.245.0",
+      "predicted_website": "Unknown",
+      "confidence": 0.022310348227620125,
+      "tor_relay": "136.243.174.159",
+      "relay_nickname": "MaverickPass"
+    },
+    {
+      "flow_id": "172.21.245.0->136.243.174.159",
+      "predicted_website": "Unknown",
+      "confidence": 0.022310223430395126,
+      "tor_relay": "136.243.174.159",
+      "relay_nickname": "MaverickPass"
+    }
+  ]
+}

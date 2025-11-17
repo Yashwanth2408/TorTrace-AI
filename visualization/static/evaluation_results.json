@@ -1,0 +1,115 @@
+{
+  "classification_report": {
+    "0": {
+      "precision": 0.4749792186201164,
+      "recall": 0.9848328162702517,
+      "f1-score": 0.6408703454463885,
+      "support": 2901.0
+    },
+    "1": {
+      "precision": 0.9967939376275139,
+      "recall": 0.8124480342083383,
+      "f1-score": 0.8952293698056409,
+      "support": 16838.0
+    },
+    "accuracy": 0.8377830690511171,
+    "macro avg": {
+      "precision": 0.7358865781238151,
+      "recall": 0.898640425239295,
+      "f1-score": 0.7680498576260147,
+      "support": 19739.0
+    },
+    "weighted avg": {
+      "precision": 0.920103907745531,
+      "recall": 0.8377830690511171,
+      "f1-score": 0.8578467501356377,
+      "support": 19739.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      2857,
+      44
+    ],
+    [
+      3158,
+      13680
+    ]
+  ],
+  "roc_auc": 0.907756290156222,
+  "top_features": [
+    {
+      "feature": " Protocol",
+      "importance": 0.13109208908702857
+    },
+    {
+      "feature": " Bwd IAT Max",
+      "importance": 0.11227875366395922
+    },
+    {
+      "feature": " Flow Bytes/s",
+      "importance": 0.11085483340694614
+    },
+    {
+      "feature": " Bwd IAT Std",
+      "importance": 0.10211275733254026
+    },
+    {
+      "feature": " Flow IAT Min",
+      "importance": 0.08402456143663535
+    },
+    {
+      "feature": "Bwd IAT Mean",
+      "importance": 0.08298850082653679
+    },
+    {
+      "feature": " Flow Duration",
+      "importance": 0.06667686690376753
+    },
+    {
+      "feature": " Fwd IAT Std",
+      "importance": 0.05956342655614365
+    },
+    {
+      "feature": " Destination Port",
+      "importance": 0.041616106249652014
+    },
+    {
+      "feature": " Flow IAT Std",
+      "importance": 0.03655890954474264
+    },
+    {
+      "feature": " Fwd IAT Max",
+      "importance": 0.029782238743991357
+    },
+    {
+      "feature": " Flow IAT Mean",
+      "importance": 0.023463497481166738
+    },
+    {
+      "feature": " Bwd IAT Min",
+      "importance": 0.0219267786339316
+    },
+    {
+      "feature": " Flow IAT Max",
+      "importance": 0.021645581854969616
+    },
+    {
+      "feature": "Fwd IAT Mean",
+      "importance": 0.021029608322730573
+    }
+  ],
+  "cv_scores": [
+    0.9099375770267428,
+    0.9096945055834068,
+    0.9048965842287074,
+    0.908135839322552,
+    0.904161208351672
+  ],
+  "best_params": {
+    "max_depth": 10,
+    "min_samples_leaf": 2,
+    "min_samples_split": 2,
+    "n_estimators": 200
+  }
+}
