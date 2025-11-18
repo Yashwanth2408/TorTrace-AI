@@ -204,6 +204,8 @@ sudo python3 live_monitor.py
 python3 traffic_analysis/pcap_analyzer.py \
   --pcap data/pcap_files/sample.pcap \
   --out data/results/analysis.json
+#replace the analysis.json and sample.pcap file with your file
+
 ```
 
 
@@ -212,7 +214,7 @@ python3 traffic_analysis/pcap_analyzer.py \
 To start the TorTrace-AI web dashboard, use the following command:
 
 ```bash
-python3 dashboard.py
+python3 visualization/dashboard.py
 ```
 
 After running this command, open your web browser and navigate to:
